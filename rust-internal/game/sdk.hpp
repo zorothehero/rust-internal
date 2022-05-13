@@ -4,7 +4,6 @@
 class Component;
 class GameObject;
 class Type;
-class DDraw;
 class Event;
 class GUIContent;
 class GUIStyle;
@@ -36,6 +35,7 @@ class GUILayoutOption;
 class AssetBundle;
 class Material;
 class Graphics;
+class ExplosionsFPS;
 
 #include "rust/TextAnchor.hpp"
 #include "rust/EventType.hpp"
@@ -54,13 +54,13 @@ class Graphics;
 #include "rust/GUIUtility.hpp"
 #include "rust/Material.hpp"
 #include "rust/Graphics.hpp"
+#include "rust/ExplosionsFPS.hpp"
 
 #include "rust/Transform.hpp"
 #include "rust/Component.hpp"
 #include "rust/Type.hpp"
 #include "rust/GameObject.hpp"
 #include "rust/Input.hpp"
-#include "rust/DDraw.hpp"
 #include "rust/Event.hpp"
 #include "rust/GUIContent.hpp"
 #include "rust/GUIStyle.hpp"
@@ -139,7 +139,7 @@ namespace Renderer
 		{
 			return;
 		}
-         
+		
 		Texture2D* texture2D = antiAlias ? aaLineTex : lineTex;
 		Material* mat = antiAlias ? blendMaterial : blitMaterial;
 		if(antiAlias)

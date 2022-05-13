@@ -100,7 +100,6 @@
     <ClInclude Include="game\rust\Camera.hpp" />
     <ClInclude Include="game\rust\Color.hpp" />
     <ClInclude Include="game\rust\Component.hpp" />
-    <ClInclude Include="game\rust\DDraw.hpp" />
     <ClInclude Include="game\rust\Event.hpp" />
     <ClInclude Include="game\rust\EventType.hpp" />
     <ClInclude Include="game\rust\GameObject.hpp" />
@@ -125,6 +124,7 @@
     <ClInclude Include="game\rust\Model.hpp" />
     <ClInclude Include="game\rust\PlayerEyes.hpp" />
     <ClInclude Include="game\rust\PlayerFlags.hpp" />
+    <ClInclude Include="game\rust\ExplosionsFPS.hpp" />
     <ClInclude Include="game\rust\Rect.hpp" />
     <ClInclude Include="game\rust\Screen.hpp" />
     <ClInclude Include="game\rust\TextAnchor.hpp" />

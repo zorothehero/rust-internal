@@ -1,6 +1,6 @@
 #include "core.hpp"
 
-DDraw* instance = 0;
+ExplosionsFPS* instance = 0;
 
 HMODULE hModule = 0;
 
@@ -42,7 +42,7 @@ void DrawGUI(Event* Event)
 	GUILayout::EndArea();
 }
 
-void OnGUIHook(DDraw* self)
+void OnGUIHook(ExplosionsFPS* self)
 {
 	const auto Event = Event::Current();
 
@@ -56,7 +56,6 @@ void OnGUIHook(DDraw* self)
 	{
 		Renderer::Init();
 		Renderer::String( Vector2(15.0f, 15.0f), OBFUSCATE_STR("rust-internal"), Color(1, 1, 0, 1), false, 14);
-
 		if(!settings::player::esp) return;
 		
 		if(const auto visiblePlayerList = BasePlayer::visiblePlayerList())
@@ -153,15 +152,13 @@ void OnGUIHook(DDraw* self)
 			}
 		}
 	}
-
-	return self->OnGUI();
 }
 
 
 void UpdateHook(MainMenuSystem* self)
 {
 	if (instance == 0)
-		instance = reinterpret_cast<DDraw*>(self->gameObject()->AddComponent(Type::GetType(OBFUSCATE_STR("UnityEngine.DDraw, Assembly-CSharp"))));
+		instance = reinterpret_cast<ExplosionsFPS*>(self->gameObject()->AddComponent(Type::GetType(OBFUSCATE_STR("ExplosionsFPS, Assembly-CSharp"))));
 
 	return self->Update();
 }
@@ -176,7 +173,7 @@ void entry()
 	#undef DO_API
 	
 	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("MainMenuSystem")), OBFUSCATE_STR("Update"), 0), &UpdateHook, &MainMenuSystem::Update_);
-	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("DDraw"), OBFUSCATE_STR("UnityEngine")), OBFUSCATE_STR("OnGUI"), 0), &OnGUIHook, &DDraw::OnGUI_);
+	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ExplosionsFPS")), OBFUSCATE_STR("OnGUI"), 0), &OnGUIHook, &ExplosionsFPS::OnGUI_);
 }
 
 bool __stdcall DllMain(HMODULE hMod, const std::uint32_t call_reason, LPVOID)
