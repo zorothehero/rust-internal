@@ -169,45 +169,44 @@ namespace Renderer
 		GUI::Box(position, text);
 	}
 
-	void Label(Rect position, const char* content, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
+	void Label(Rect position, const char* text, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
 	{
-		GUI::Color(color);
-		GUIContent* ContentTemp = GUIContent::Temp(il2cpp_string_new(content));
 		guiStyle->FontSize(size);
-		guiStyle->Alignment(centered ? TextAnchor::UpperCenter : TextAnchor::UpperLeft);
+		GUI::Color(color);
+		GUIContent* content = GUIContent::Temp(il2cpp_string_new(text));
+		guiStyle->Alignment(TextAnchor::UpperLeft);
+		if(centered)
+			position.x -= guiStyle->CalcSize(content).x / 2.0f;
 		
-		GUI::Label(position, ContentTemp, guiStyle);
+		GUI::Label(position, content, guiStyle);
 	}
 	
-	void Label(Rect position, Il2CppString* content, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
+	void Label(Rect position, Il2CppString* text, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
 	{
-		GUI::Color(color);
-		GUIContent* ContentTemp = GUIContent::Temp(content);
 		guiStyle->FontSize(size);
-		guiStyle->Alignment(centered ? TextAnchor::MiddleCenter : TextAnchor::UpperLeft);
+		GUI::Color(color);
+		GUIContent* content = GUIContent::Temp(text);
+		guiStyle->Alignment(TextAnchor::UpperLeft);
+		if(centered)
+			position.x -= guiStyle->CalcSize(content).x / 2.0f;
 		
-		GUI::Label(position, ContentTemp, guiStyle);
+		GUI::Label(position, content, guiStyle);
 	}
 
-	void String(Vector2 position, Il2CppString* content, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
+	void String(Vector2 position, Il2CppString* text, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
 	{
-		Label(Rect(position.x, position.y, 300.0f, 25.0f), content, color, centered, size);
+		Label(Rect(position.x, position.y, 300.0f, 25.0f), text, color, centered, size);
 	}
 
-	void String(Vector2 position, const char* content, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
+	void String(Vector2 position, const char* text, Color color = Color(1, 1, 1, 1), bool centered = false, int size = 12)
 	{
-		Label(Rect(position.x, position.y, 300.0f, 25.0f), content, color, centered, size);
+		Label(Rect(position.x, position.y, 300.0f, 25.0f), text, color, centered, size);
 	}
 
 	void Button(Rect position, const char* content, Color color)
 	{
 		GUI::Color(color);
 		GUI::Button(position, GUIContent::Temp(il2cpp_string_new(content)), guiStyle);
-	}
-
-	namespace UI
-	{
-		
 	}
 }
 

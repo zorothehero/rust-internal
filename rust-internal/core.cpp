@@ -15,7 +15,7 @@ void DrawGUI(Event* Event)
 	GUILayout::BeginArea(Rect(area.x + 10, area.y + 40, area.w - 15, area.h));
 
 	// Controls
-
+	
 	GUILayout::BeginHorizontal();
 	if(GUILayout::Button("Visuals")) settings::currentTab = Tab::Visuals;
 	if(GUILayout::Button("Combat")) settings::currentTab = Tab::Combat;
@@ -72,16 +72,16 @@ void OnGUIHook(DDraw* self)
 
 				float y = 0.0f;
 				
-				Renderer::String(Vector2(screenPos.x, screenPos.y + y), player->_displayName(), Color(1, 1, 1, 1));
+				Renderer::String(Vector2(screenPos.x, screenPos.y + y), player->_displayName(), Color(1, 1, 1, 1), true);
 				if(settings::player::health)
 				{
 					y += 15.0f;
-					Renderer::String(Vector2(screenPos.x, screenPos.y + y), il2cpp_string_new(std::format(OBFUSCATE_STR("{:.2f}"), player->health()).c_str()), Color(1, 1, 1, 1));
+					Renderer::String(Vector2(screenPos.x, screenPos.y + y), il2cpp_string_new(std::format(OBFUSCATE_STR("{:.2f} HP"), player->health()).c_str()), Color(1, 1, 1, 1), true);
 				}
 				if(settings::player::distance)
 				{
 					y += 15.0f;
-					Renderer::String(Vector2(screenPos.x, screenPos.y + y), il2cpp_string_new(std::format(OBFUSCATE_STR("{:.2f}"), LocalPlayer::Entity()->midPoint().distance(player->midPoint())).c_str()), Color(1, 1, 1, 1));
+					Renderer::String(Vector2(screenPos.x, screenPos.y + y), il2cpp_string_new(std::format(OBFUSCATE_STR("{:.2f}m"), LocalPlayer::Entity()->midPoint().distance(player->midPoint())).c_str()), Color(1, 1, 1, 1), true);
 				}
 
 				if(settings::player::skeleton)
