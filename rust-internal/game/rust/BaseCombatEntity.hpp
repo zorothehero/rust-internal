@@ -1,0 +1,29 @@
+﻿#ifndef RUST_BaseCombatEntity
+#define RUST_BaseCombatEntity
+#include "BaseEntity.hpp"
+
+class BaseCombatEntity : public BaseEntity
+{
+public:
+    enum class LifeState {
+        Alive = 0,
+        Dead = 1
+    };
+    
+    float health()
+    {
+        return *reinterpret_cast<float*>(this + offsets::BaseCombatEntity::_health);
+    }
+
+    float maxHealth()
+    {
+        return *reinterpret_cast<float*>(this + offsets::BaseCombatEntity::_maxHealth);
+    }
+
+    LifeState lifeState()
+    {
+        return *reinterpret_cast<LifeState*>(this + offsets::BaseCombatEntity::lifestate);
+    }
+};
+
+#endif

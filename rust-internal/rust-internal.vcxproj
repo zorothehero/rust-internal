@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{0d0b03af-b548-413c-8ac8-6760fe37bf6f}</ProjectGuid>
+    <RootNamespace>rust_internal</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <ExceptionHandling>false</ExceptionHandling>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="core.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game\rust\AssetBundle.hpp" />
+    <ClInclude Include="game\rust\BaseCombatEntity.hpp" />
+    <ClInclude Include="game\rust\BaseEntity.hpp" />
+    <ClInclude Include="game\rust\BaseNetworkable.hpp" />
+    <ClInclude Include="game\rust\BasePlayer.hpp" />
+    <ClInclude Include="game\rust\Bone.hpp" />
+    <ClInclude Include="game\rust\BoneCache.hpp" />
+    <ClInclude Include="game\rust\BoxBounds.hpp" />
+    <ClInclude Include="game\rust\Camera.hpp" />
+    <ClInclude Include="game\rust\Color.hpp" />
+    <ClInclude Include="game\rust\Component.hpp" />
+    <ClInclude Include="game\rust\DDraw.hpp" />
+    <ClInclude Include="game\rust\Event.hpp" />
+    <ClInclude Include="game\rust\EventType.hpp" />
+    <ClInclude Include="game\rust\GameObject.hpp" />
+    <ClInclude Include="game\rust\GamePhysics.hpp" />
+    <ClInclude Include="game\rust\GL.hpp" />
+    <ClInclude Include="game\rust\Graphics.hpp" />
+    <ClInclude Include="game\rust\GUI.hpp" />
+    <ClInclude Include="game\rust\GUIContent.hpp" />
+    <ClInclude Include="game\rust\GUILayout.hpp" />
+    <ClInclude Include="game\rust\GUILayoutOption.hpp" />
+    <ClInclude Include="game\rust\GUISkin.hpp" />
+    <ClInclude Include="game\rust\GUIStyle.hpp" />
+    <ClInclude Include="game\rust\GUIUtility.hpp" />
+    <ClInclude Include="game\rust\Input.hpp" />
+    <ClInclude Include="game\rust\KeyCode.hpp" />
+    <ClInclude Include="game\rust\ListDictionary.hpp" />
+    <ClInclude Include="game\rust\LocalPlayer.hpp" />
+    <ClInclude Include="game\rust\MainCamera.hpp" />
+    <ClInclude Include="game\rust\MainMenuSystem.hpp" />
+    <ClInclude Include="game\rust\Material.hpp" />
+    <ClInclude Include="game\rust\Matrix4x4.hpp" />
+    <ClInclude Include="game\rust\Model.hpp" />
+    <ClInclude Include="game\rust\PlayerEyes.hpp" />
+    <ClInclude Include="game\rust\PlayerFlags.hpp" />
+    <ClInclude Include="game\rust\Rect.hpp" />
+    <ClInclude Include="game\rust\Screen.hpp" />
+    <ClInclude Include="game\rust\TextAnchor.hpp" />
+    <ClInclude Include="game\rust\Texture2D.hpp" />
+    <ClInclude Include="game\rust\Transform.hpp" />
+    <ClInclude Include="game\rust\Type.hpp" />
+    <ClInclude Include="game\unity\il2cpp-helper.hpp" />
+    <ClInclude Include="game\unity\il2cpp.hpp" />
+    <ClInclude Include="game\offsets.hpp" />
+    <ClInclude Include="game\sdk.hpp" />
+    <ClInclude Include="core.hpp" />
+    <ClInclude Include="game\vector.hpp" />
+    <ClInclude Include="settings.hpp" />
+    <ClInclude Include="shader.hpp" />
+    <ClInclude Include="utils\crc32.hpp" />
+    <ClInclude Include="utils\hook.hpp" />
+    <ClInclude Include="utils\limp.hpp" />
+    <ClInclude Include="utils\xorstr.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
