@@ -114,6 +114,7 @@
     <ClInclude Include="game\rust\GUIStyle.hpp" />
     <ClInclude Include="game\rust\GUIUtility.hpp" />
     <ClInclude Include="game\rust\Input.hpp" />
+    <ClInclude Include="game\rust\Internal_DrawTextureArguments.hpp" />
     <ClInclude Include="game\rust\KeyCode.hpp" />
     <ClInclude Include="game\rust\ListDictionary.hpp" />
     <ClInclude Include="game\rust\LocalPlayer.hpp" />

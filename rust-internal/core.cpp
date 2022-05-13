@@ -56,6 +56,7 @@ void OnGUIHook(ExplosionsFPS* self)
 	{
 		Renderer::Init();
 		Renderer::String( Vector2(15.0f, 15.0f), OBFUSCATE_STR("rust-internal"), Color(1, 1, 0, 1), false, 14);
+		Renderer::Line({0,0}, {10, 10}, Color::white(), 1.5f);
 		if(!settings::player::esp) return;
 		
 		if(const auto visiblePlayerList = BasePlayer::visiblePlayerList())
@@ -183,10 +184,6 @@ bool __stdcall DllMain(HMODULE hMod, const std::uint32_t call_reason, LPVOID)
 	case DLL_PROCESS_ATTACH:
 		hModule = hMod;
 		entry();
-		break;
-	case DLL_PROCESS_DETACH:
-		hookmanager::unhook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("MainMenuSystem")), OBFUSCATE_STR("Update"), 0), MainMenuSystem::Update_);
-		hookmanager::unhook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("DDraw"), OBFUSCATE_STR("UnityEngine")), OBFUSCATE_STR("OnGUI"), 0), DDraw::OnGUI_);
 		break;
 	default:
 		break;

@@ -37,6 +37,7 @@ class Material;
 class Graphics;
 class ExplosionsFPS;
 
+
 #include "rust/TextAnchor.hpp"
 #include "rust/EventType.hpp"
 #include "rust/Color.hpp"
@@ -55,6 +56,7 @@ class ExplosionsFPS;
 #include "rust/Material.hpp"
 #include "rust/Graphics.hpp"
 #include "rust/ExplosionsFPS.hpp"
+#include "rust/Internal_DrawTextureArguments.hpp"
 
 #include "rust/Transform.hpp"
 #include "rust/Component.hpp"
