@@ -94,13 +94,11 @@ namespace Renderer
 	Texture2D* aaLineTex;
 	Material* blitMaterial;
 	Material* blendMaterial;
-	//AssetBundle* bundle;
 	
 	void Init()
 	{
 		if (Skin && guiStyle && lineTex && aaLineTex && blitMaterial && blendMaterial) return;
 
-		//bundle = AssetBundle::LoadFromMemory(shader_data);
 		blitMaterial = GUI::blitMaterial();
 		blendMaterial = GUI::blendMaterial();
 		
