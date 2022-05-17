@@ -67,12 +67,12 @@ public:
         reinterpret_cast<void(*)(Il2CppString*, Il2CppArray*)>(game_module + offsets::UnityEngine_GUILayout::Label_string_GUILayoutOptionarray)(il2cpp_string_new(text), options);
     }
 
-    static bool Toggle(bool value, const char* text)
+    static void Toggle(bool& value, const char* text)
     {
         Il2CppArray* options = il2cpp_array_new_specific((Il2CppClass*)il2cpp::getClass("GUILayoutOption", "UnityEngine"), 1u);
         *reinterpret_cast<GUILayoutOption**>(std::uint64_t(options) + 0x20) = ExpandWidth(false);
         
-        return reinterpret_cast<bool(*)(bool, Il2CppString*, Il2CppArray*)>(game_module + offsets::UnityEngine_GUILayout::Toggle_bool_string_GUILayoutOptionarray)(value, il2cpp_string_new(text), options);
+        value = reinterpret_cast<bool(*)(bool, Il2CppString*, Il2CppArray*)>(game_module + offsets::UnityEngine_GUILayout::Toggle_bool_string_GUILayoutOptionarray)(value, il2cpp_string_new(text), options);
     }
 };
 

@@ -22,12 +22,12 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -89,6 +89,7 @@
     <ClCompile Include="core.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="game\features\Flyhack.hpp" />
     <ClInclude Include="game\rust\AssetBundle.hpp" />
     <ClInclude Include="game\rust\BaseCombatEntity.hpp" />
     <ClInclude Include="game\rust\BaseEntity.hpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="game\rust\Camera.hpp" />
     <ClInclude Include="game\rust\Color.hpp" />
     <ClInclude Include="game\rust\Component.hpp" />
+    <ClInclude Include="game\rust\EnvironmentManager.hpp" />
     <ClInclude Include="game\rust\Event.hpp" />
     <ClInclude Include="game\rust\EventType.hpp" />
     <ClInclude Include="game\rust\GameObject.hpp" />
@@ -121,17 +123,27 @@
     <ClInclude Include="game\rust\MainCamera.hpp" />
     <ClInclude Include="game\rust\MainMenuSystem.hpp" />
     <ClInclude Include="game\rust\Material.hpp" />
+    <ClInclude Include="game\rust\Mathf.hpp" />
     <ClInclude Include="game\rust\Matrix4x4.hpp" />
     <ClInclude Include="game\rust\Model.hpp" />
+    <ClInclude Include="game\rust\BaseMovement.hpp" />
+    <ClInclude Include="game\rust\ModelState.hpp" />
+    <ClInclude Include="game\rust\Physics.hpp" />
     <ClInclude Include="game\rust\PlayerEyes.hpp" />
     <ClInclude Include="game\rust\PlayerFlags.hpp" />
     <ClInclude Include="game\rust\ExplosionsFPS.hpp" />
+    <ClInclude Include="game\rust\PlayerTick.hpp" />
+    <ClInclude Include="game\rust\PlayerWalkMovement.hpp" />
+    <ClInclude Include="game\rust\ProtoBuf.hpp" />
     <ClInclude Include="game\rust\Rect.hpp" />
     <ClInclude Include="game\rust\Screen.hpp" />
     <ClInclude Include="game\rust\TextAnchor.hpp" />
     <ClInclude Include="game\rust\Texture2D.hpp" />
+    <ClInclude Include="game\rust\Time.hpp" />
     <ClInclude Include="game\rust\Transform.hpp" />
     <ClInclude Include="game\rust\Type.hpp" />
+    <ClInclude Include="game\rust\Vector3Ex.hpp" />
+    <ClInclude Include="game\rust\WaterLevel.hpp" />
     <ClInclude Include="game\unity\il2cpp-helper.hpp" />
     <ClInclude Include="game\unity\il2cpp.hpp" />
     <ClInclude Include="game\offsets.hpp" />

@@ -195,7 +195,6 @@ public:
 	}
 };
 
-
 class Vector3
 {
 public:
@@ -377,7 +376,9 @@ public:
 		}
 		return Vector3();
 	}
+
 };
+
 class Square2 {
 public:
 	Vector2 pos, size;

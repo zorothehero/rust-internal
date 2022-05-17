@@ -21,7 +21,7 @@ public:
         // reinterpret_cast<void*(*)(Internal_DrawTextureArguments)>(game_module + offsets::UnityEngine_Graphics::Internal_DrawTexture_Internal_DrawTextureArguments)(internal_DrawTextureArguments);
         
         reinterpret_cast<void*(*)(Rect,Texture2D*,Rect,int,int,int,int,Color,Material*,int)>
-            (game_module + offsets::UnityEngine_Graphics::Internal_DrawTexture_Internal_DrawTextureArguments)
+            (game_module + offsets::UnityEngine_Graphics::DrawTextureImpl_Rect_Texture_Rect_int_int_int_int_Color_Material_int)
             (screenRect, texture, sourceRect, leftBorder, rightBorder, topBorder, bottomBorder, color, mat, pass);
     }
 };

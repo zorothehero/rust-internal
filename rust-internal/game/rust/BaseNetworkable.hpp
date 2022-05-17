@@ -4,7 +4,11 @@
 class BaseNetworkable : public Component
 {
 public:
-    
+	struct LoadInfo
+	{
+		ProtoBuf::Entity* msg;
+		bool fromDisk;
+	};
 };
 
 #endif

@@ -36,7 +36,16 @@ class AssetBundle;
 class Material;
 class Graphics;
 class ExplosionsFPS;
-
+class PlayerTick;
+class WaterLevel;
+class EnvironmentManager;
+class Physics;
+class Mathf;
+class Vector3Ex;
+class Time;
+class BaseMovement;
+class ModelState;
+class PlayerWalkMovement;
 
 #include "rust/TextAnchor.hpp"
 #include "rust/EventType.hpp"
@@ -58,6 +67,16 @@ class ExplosionsFPS;
 #include "rust/ExplosionsFPS.hpp"
 #include "rust/Internal_DrawTextureArguments.hpp"
 
+#include "rust/PlayerWalkMovement.hpp"
+#include "rust/ProtoBuf.hpp"
+#include "rust/ModelState.hpp"
+#include "rust/BaseMovement.hpp"
+#include "rust/Time.hpp"
+#include "rust/Vector3Ex.hpp"
+#include "rust/Mathf.hpp"
+#include "rust/Physics.hpp"
+#include "rust/EnvironmentManager.hpp"
+#include "rust/WaterLevel.hpp"
 #include "rust/Transform.hpp"
 #include "rust/Component.hpp"
 #include "rust/Type.hpp"
@@ -77,11 +96,14 @@ class ExplosionsFPS;
 #include "rust/Model.hpp"
 #include "rust/BaseEntity.hpp"
 #include "rust/BaseCombatEntity.hpp"
+#include "rust/PlayerTick.hpp"
 #include "rust/BasePlayer.hpp"
 #include "rust/LocalPlayer.hpp"
 #include "rust/GUILayout.hpp"
 #include "rust/GUILayoutOption.hpp"
 #include "rust/AssetBundle.hpp"
+
+#include "features/Flyhack.hpp"
 
 Vector3 LocalPlayer::eyePos()
 {

@@ -1,8 +1,7 @@
 ﻿#ifndef RUST_PlayerFlags
 #define RUST_PlayerFlags
 
-enum PlayerFlags
-{
+enum class PlayerFlags : int {
     Unused1 = 1,
     Unused2 = 2,
     IsAdmin = 4,
@@ -21,10 +20,42 @@ enum PlayerFlags
     Relaxed = 65536,
     SafeZone = 131072,
     ServerFall = 262144,
-    Incapacitated = 524288,
     Workbench1 = 1048576,
     Workbench2 = 2097152,
-    Workbench3 = 4194304
+    Workbench3 = 4194304,
 };
+PlayerFlags operator &(PlayerFlags lhs, PlayerFlags rhs) {
+    return static_cast<PlayerFlags> (
+        static_cast<std::underlying_type<PlayerFlags>::type>(lhs) &
+        static_cast<std::underlying_type<PlayerFlags>::type>(rhs)
+        );
+}
+PlayerFlags operator ^(PlayerFlags lhs, PlayerFlags rhs) {
+    return static_cast<PlayerFlags> (
+        static_cast<std::underlying_type<PlayerFlags>::type>(lhs) ^
+        static_cast<std::underlying_type<PlayerFlags>::type>(rhs)
+        );
+}
+PlayerFlags operator ~(PlayerFlags rhs) {
+    return static_cast<PlayerFlags> (
+        ~static_cast<std::underlying_type<PlayerFlags>::type>(rhs)
+        );
+}
+PlayerFlags& operator |=(PlayerFlags& lhs, PlayerFlags rhs) {
+    lhs = static_cast<PlayerFlags> (
+        static_cast<std::underlying_type<PlayerFlags>::type>(lhs) |
+        static_cast<std::underlying_type<PlayerFlags>::type>(rhs)
+        );
+
+    return lhs;
+}
+PlayerFlags& operator &=(PlayerFlags& lhs, PlayerFlags rhs) {
+    lhs = static_cast<PlayerFlags> (
+        static_cast<std::underlying_type<PlayerFlags>::type>(lhs) &
+        static_cast<std::underlying_type<PlayerFlags>::type>(rhs)
+        );
+
+    return lhs;
+}
 
 #endif

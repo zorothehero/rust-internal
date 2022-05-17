@@ -3,7 +3,8 @@
 enum class Tab
 {
     Visuals,
-    Combat
+    Combat,
+    Misc
 };
 
 namespace settings
@@ -19,6 +20,12 @@ namespace settings
         bool distance = false;
     }
 
-    
+    namespace misc
+    {
+        bool flyhackbar = false;
+        bool antiflyhack = false;
+        bool AdminMode = false;
+        bool inf_jump = false;
+    }
     
 }

@@ -11,31 +11,40 @@ void DrawGUI(Event* Event)
 	if (Event->Type() == EventType::MouseDrag && Rect(area.x, area.y, area.w, 30).Contains(Event->mousePosition()))
 		area += Event->Delta();
 	
-	GUI::Box(area, "rust-internal");
+	GUI::Box(area, OBFUSCATE_STR("rust-internal"));
 	GUILayout::BeginArea(Rect(area.x + 10, area.y + 40, area.w - 15, area.h));
 
 	// Controls
 	
 	GUILayout::BeginHorizontal();
-	if(GUILayout::Button("Visuals")) settings::currentTab = Tab::Visuals;
-	if(GUILayout::Button("Combat")) settings::currentTab = Tab::Combat;
+	if(GUILayout::Button(OBFUSCATE_STR("Visuals"))) settings::currentTab = Tab::Visuals;
+	if(GUILayout::Button(OBFUSCATE_STR("Combat"))) settings::currentTab = Tab::Combat;
+	if(GUILayout::Button(OBFUSCATE_STR("Misc"))) settings::currentTab = Tab::Misc;
 	GUILayout::EndHorizontal();
 	
 	switch(settings::currentTab)
 	{
 	case Tab::Visuals:
-		settings::player::esp = GUILayout::Toggle(settings::player::esp, "Player");
+		GUILayout::Toggle(settings::player::esp, OBFUSCATE_STR("Player"));
 		if(settings::player::esp)
 		{
-			settings::player::health = GUILayout::Toggle(settings::player::health, "Health");
-			settings::player::distance = GUILayout::Toggle(settings::player::distance, "Distance");
-			settings::player::skeleton = GUILayout::Toggle(settings::player::skeleton, "Skeleton");
+			GUILayout::Toggle(settings::player::health, OBFUSCATE_STR("Health"));
+			GUILayout::Toggle(settings::player::distance, OBFUSCATE_STR("Distance"));
+			GUILayout::Toggle(settings::player::skeleton, OBFUSCATE_STR("Skeleton"));
 		}
 		break;
 	case Tab::Combat:
 		
 		break;
+	case Tab::Misc:
+		GUILayout::Toggle(settings::misc::flyhackbar, OBFUSCATE_STR("Flyhack Indicator"));
+		if(settings::misc::flyhackbar)
+			GUILayout::Toggle(settings::misc::antiflyhack, OBFUSCATE_STR("Anti Flyhack Kick"));
+		GUILayout::Toggle(settings::misc::AdminMode, OBFUSCATE_STR("Admin Mode"));
+		GUILayout::Toggle(settings::misc::inf_jump, OBFUSCATE_STR("Infinite Jump"));
+		break;
 	}
+	
 	
 	// End of controls
 	
@@ -54,9 +63,14 @@ void OnGUIHook(ExplosionsFPS* self)
 
 	if (Event->Type() == EventType::Repaint)
 	{
+		if (auto localPlayer = LocalPlayer::Entity())
+		{
+			if(settings::misc::AdminMode)
+				localPlayer->playerFlags() |= PlayerFlags::IsAdmin;
+		}
 		Renderer::Init();
 		Renderer::String( Vector2(15.0f, 15.0f), OBFUSCATE_STR("rust-internal"), Color(1, 1, 0, 1), false, 14);
-		Renderer::Line({0,0}, {10, 10}, Color::white(), 1.5f);
+		//Renderer::Line({0,0}, {10, 10}, Color::white(), 1.5f);
 		if(!settings::player::esp) return;
 		
 		if(const auto visiblePlayerList = BasePlayer::visiblePlayerList())
@@ -164,6 +178,29 @@ void UpdateHook(MainMenuSystem* self)
 	return self->Update();
 }
 
+void SendClientTick(BasePlayer* self)
+{
+
+	Flyhack::IsFlying(settings::misc::antiflyhack);
+
+	return self->SendClientTick();
+}
+
+void set_flying(ModelState* self, bool state)
+{
+	if (settings::misc::AdminMode)
+		return self->set_flying(false);
+
+	return self->set_flying(state);
+}
+
+bool CanJumpHook(PlayerWalkMovement* self)
+{
+	if (settings::misc::inf_jump)
+		return true;
+	return self->CanJump();
+}
+
 void entry()
 {
 	game_module = reinterpret_cast<std::uintptr_t>(LI_MODULE("GameAssembly.dll").cached());
@@ -173,6 +210,9 @@ void entry()
 	#include "game/unity/il2cpp.hpp"
 	#undef DO_API
 	
+	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("PlayerWalkMovement")), OBFUSCATE_STR("CanJump"), 3), &CanJumpHook, &PlayerWalkMovement::CanJump_);
+	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ModelState")), OBFUSCATE_STR("set_flying"), 1), &set_flying, &ModelState::set_flying_);
+	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("BasePlayer")), OBFUSCATE_STR("SendClientTick"), 0), &SendClientTick, &BasePlayer::SendClientTick_);
 	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("MainMenuSystem")), OBFUSCATE_STR("Update"), 0), &UpdateHook, &MainMenuSystem::Update_);
 	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ExplosionsFPS")), OBFUSCATE_STR("OnGUI"), 0), &OnGUIHook, &ExplosionsFPS::OnGUI_);
 }

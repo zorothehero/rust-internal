@@ -112,6 +112,31 @@ public:
         return *reinterpret_cast<ListDictionary**>(reinterpret_cast<std::uint64_t>(klazz->static_fields) + offsets::BasePlayer::visiblePlayerList);
     }
 
+    PlayerTick* lastSentTick()
+    {
+        return *reinterpret_cast<PlayerTick**>(this + offsets::BasePlayer::lastSentTick);
+    }
+
+    float GetRadius()
+    {
+        return reinterpret_cast<float(*)(BasePlayer*)>(game_module + offsets::BasePlayer::GetRadius)(this);
+    }
+
+    float GetHeight(bool ducked)
+    {
+        return reinterpret_cast<float(*)(BasePlayer*, bool)>(game_module + offsets::BasePlayer::GetHeight_bool)(this, ducked);
+    }
+
+    bool OnLadder()
+    {
+        return reinterpret_cast<bool(*)(BasePlayer*)>(game_module + offsets::BasePlayer::OnLadder)(this);
+    }
+
+    float GetJumpHeight()
+    {
+        return reinterpret_cast<float(*)(BasePlayer*)>(game_module + offsets::BasePlayer::GetJumpHeight)(this);
+    }
+
     PlayerEyes* eyes()
     {
         return *reinterpret_cast<PlayerEyes**>(this + offsets::BasePlayer::eyes);
@@ -125,6 +150,34 @@ public:
     Vector3 midPoint()
     {
         return this->bones()->r_foot->position.midPoint(this->bones( )->l_foot->position) - Vector3(0.0f, 0.1f, 0.0f);
+    }
+
+    BaseMovement* movement()
+    {
+        return *reinterpret_cast<BaseMovement**>(this + offsets::BasePlayer::movement);
+    }
+    
+    void ForcePositionTo(Vector3 pos)
+    {
+        return reinterpret_cast<void(*)(BasePlayer*, Vector3)>(game_module + offsets::BasePlayer::ForcePositionTo_Vector3)(this, pos);
+    }
+
+    static inline void(*SendClientTick_)(BasePlayer*) = nullptr;
+
+    void SendClientTick()
+    {
+        return SendClientTick_(this);
+    }
+
+    PlayerFlags& playerFlags()
+    {
+        return *reinterpret_cast<PlayerFlags*>(this + offsets::BasePlayer::playerFlags);
+    }
+
+    bool HasPlayerFlag(PlayerFlags flag) {
+        if (!this) return false;
+
+        return (playerFlags() & flag) == flag;
     }
 };
 
