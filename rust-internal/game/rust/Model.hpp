@@ -7,16 +7,19 @@ class Model : public Component
 public:
     Array<Transform*>* boneTransforms()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<Array<Transform*>**>(this + offsets::Model::boneTransforms);
     }
 
     Array<Il2CppString*>* boneNames()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<Array<Il2CppString*>**>(this + offsets::Model::boneNames);
     }
 
     Bone* resolve(std::uint32_t hash)
     {
+        if (!this) return nullptr;
         auto boneTransforms = this->boneTransforms();
         auto boneNames = this->boneNames();
 

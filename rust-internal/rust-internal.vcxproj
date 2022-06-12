@@ -65,6 +65,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>utils\detours\detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -89,12 +90,16 @@
     <ClCompile Include="core.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="game\features\aimbot.hpp" />
     <ClInclude Include="game\features\Flyhack.hpp" />
+    <ClInclude Include="game\rust\AimConeUtil.hpp" />
     <ClInclude Include="game\rust\AssetBundle.hpp" />
+    <ClInclude Include="game\rust\AttackEntity.hpp" />
     <ClInclude Include="game\rust\BaseCombatEntity.hpp" />
     <ClInclude Include="game\rust\BaseEntity.hpp" />
     <ClInclude Include="game\rust\BaseNetworkable.hpp" />
     <ClInclude Include="game\rust\BasePlayer.hpp" />
+    <ClInclude Include="game\rust\BaseProjectile.hpp" />
     <ClInclude Include="game\rust\Bone.hpp" />
     <ClInclude Include="game\rust\BoneCache.hpp" />
     <ClInclude Include="game\rust\BoxBounds.hpp" />
@@ -104,6 +109,7 @@
     <ClInclude Include="game\rust\EnvironmentManager.hpp" />
     <ClInclude Include="game\rust\Event.hpp" />
     <ClInclude Include="game\rust\EventType.hpp" />
+    <ClInclude Include="game\rust\GameManifest.hpp" />
     <ClInclude Include="game\rust\GameObject.hpp" />
     <ClInclude Include="game\rust\GamePhysics.hpp" />
     <ClInclude Include="game\rust\GL.hpp" />
@@ -115,8 +121,14 @@
     <ClInclude Include="game\rust\GUISkin.hpp" />
     <ClInclude Include="game\rust\GUIStyle.hpp" />
     <ClInclude Include="game\rust\GUIUtility.hpp" />
+    <ClInclude Include="game\rust\HeldEntity.hpp" />
     <ClInclude Include="game\rust\Input.hpp" />
+    <ClInclude Include="game\rust\InputState.hpp" />
     <ClInclude Include="game\rust\Internal_DrawTextureArguments.hpp" />
+    <ClInclude Include="game\rust\Item.hpp" />
+    <ClInclude Include="game\rust\ItemContainer.hpp" />
+    <ClInclude Include="game\rust\ItemDefinition.hpp" />
+    <ClInclude Include="game\rust\ItemModProjectile.hpp" />
     <ClInclude Include="game\rust\KeyCode.hpp" />
     <ClInclude Include="game\rust\ListDictionary.hpp" />
     <ClInclude Include="game\rust\LocalPlayer.hpp" />
@@ -128,14 +140,19 @@
     <ClInclude Include="game\rust\Model.hpp" />
     <ClInclude Include="game\rust\BaseMovement.hpp" />
     <ClInclude Include="game\rust\ModelState.hpp" />
+    <ClInclude Include="game\rust\Object.hpp" />
     <ClInclude Include="game\rust\Physics.hpp" />
     <ClInclude Include="game\rust\PlayerEyes.hpp" />
     <ClInclude Include="game\rust\PlayerFlags.hpp" />
     <ClInclude Include="game\rust\ExplosionsFPS.hpp" />
+    <ClInclude Include="game\rust\PlayerInventory.hpp" />
+    <ClInclude Include="game\rust\PlayerModel.hpp" />
     <ClInclude Include="game\rust\PlayerTick.hpp" />
     <ClInclude Include="game\rust\PlayerWalkMovement.hpp" />
+    <ClInclude Include="game\rust\Projectile.hpp" />
     <ClInclude Include="game\rust\ProtoBuf.hpp" />
     <ClInclude Include="game\rust\Rect.hpp" />
+    <ClInclude Include="game\rust\ResourceRef.hpp" />
     <ClInclude Include="game\rust\Screen.hpp" />
     <ClInclude Include="game\rust\TextAnchor.hpp" />
     <ClInclude Include="game\rust\Texture2D.hpp" />

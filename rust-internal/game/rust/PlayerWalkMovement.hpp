@@ -3,11 +3,23 @@
 
 class PlayerWalkMovement {
 public:
-    static inline bool(*CanJump_)(PlayerWalkMovement*) = nullptr;
+    static inline void(*HandleJumping_)(PlayerWalkMovement*, ModelState*, bool, bool) = nullptr;
+    static inline void(*HandleRunDuckCrawl_)(PlayerWalkMovement*, ModelState*, bool, bool, bool) = nullptr;
 
-    bool CanJump()
+    void HandleRunDuckCrawl(ModelState* state, bool wantsRun, bool wantsDuck, bool wantsCrawl)
     {
-        return CanJump_(this);
+        return HandleRunDuckCrawl_(this, state, wantsRun, wantsDuck, wantsCrawl);
+    }
+
+    void HandleJumping(ModelState* state, bool wantsJump, bool jumpInDirection = false)
+    {
+        return HandleJumping_(this, state, wantsJump, jumpInDirection);
+    }
+
+    void Jump(ModelState* state, bool inDirection)
+    {
+        if (!this) return;
+        return reinterpret_cast<void(*)(PlayerWalkMovement*, ModelState*, bool)>(game_module + offsets::PlayerWalkMovement::Jump_ModelState_bool)(this, state, inDirection);
     }
 };
 

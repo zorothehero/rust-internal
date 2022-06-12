@@ -11,10 +11,12 @@ class BasePlayer : public BaseCombatEntity
 public:
     std::uint64_t userID()
     {
+        if (!this) return 0;
         return *reinterpret_cast<std::uint64_t*>(this + offsets::BasePlayer::userID);
     }
 
     box_bounds get_bounds(BasePlayer* player, float expand = 0) {
+        if (!this) return box_bounds::null();
         box_bounds ret = { FLT_MAX, FLT_MIN, FLT_MAX, FLT_MIN };
 
         for (auto j : valid_bones) {
@@ -63,6 +65,7 @@ public:
     
     BoneCache* bones()
     {
+        if (!this || this->lifeState() == LifeState::Dead || this->health() <= 0.0f) return nullptr;
         auto cache = new BoneCache();
         auto model = this->model();
         
@@ -114,63 +117,67 @@ public:
 
     PlayerTick* lastSentTick()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<PlayerTick**>(this + offsets::BasePlayer::lastSentTick);
     }
 
     float GetRadius()
     {
+        if (!this) return 0.0f;
         return reinterpret_cast<float(*)(BasePlayer*)>(game_module + offsets::BasePlayer::GetRadius)(this);
     }
 
     float GetHeight(bool ducked)
     {
+        if (!this) return 0.0f;
         return reinterpret_cast<float(*)(BasePlayer*, bool)>(game_module + offsets::BasePlayer::GetHeight_bool)(this, ducked);
     }
 
     bool OnLadder()
     {
+        if (!this) return false;
         return reinterpret_cast<bool(*)(BasePlayer*)>(game_module + offsets::BasePlayer::OnLadder)(this);
     }
 
     float GetJumpHeight()
     {
+        if (!this) return 0.0f;
         return reinterpret_cast<float(*)(BasePlayer*)>(game_module + offsets::BasePlayer::GetJumpHeight)(this);
     }
 
     PlayerEyes* eyes()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<PlayerEyes**>(this + offsets::BasePlayer::eyes);
     }
 
     Il2CppString* _displayName()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<Il2CppString**>(this + offsets::BasePlayer::_displayName);
     }
 
     Vector3 midPoint()
     {
+        if (!this || !this->bones()) return Vector3::Zero();
         return this->bones()->r_foot->position.midPoint(this->bones( )->l_foot->position) - Vector3(0.0f, 0.1f, 0.0f);
     }
 
     BaseMovement* movement()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<BaseMovement**>(this + offsets::BasePlayer::movement);
     }
     
     void ForcePositionTo(Vector3 pos)
     {
+        if (!this) return;
         return reinterpret_cast<void(*)(BasePlayer*, Vector3)>(game_module + offsets::BasePlayer::ForcePositionTo_Vector3)(this, pos);
-    }
-
-    static inline void(*SendClientTick_)(BasePlayer*) = nullptr;
-
-    void SendClientTick()
-    {
-        return SendClientTick_(this);
     }
 
     PlayerFlags& playerFlags()
     {
+        if (!this) return *(PlayerFlags*)0;
         return *reinterpret_cast<PlayerFlags*>(this + offsets::BasePlayer::playerFlags);
     }
 
@@ -178,6 +185,61 @@ public:
         if (!this) return false;
 
         return (playerFlags() & flag) == flag;
+    }
+
+    static inline void(*SendClientTick_)(BasePlayer*) = nullptr;
+    static inline void(*OnLand_)(BasePlayer*, float) = nullptr;
+
+    void OnLand(float vel)
+    {
+        return OnLand_(this, vel);
+    }
+
+    void SendClientTick()
+    {
+        return SendClientTick_(this);
+    }
+
+    PlayerModel* playerModel()
+    {
+        if (!this) return nullptr;
+        return *reinterpret_cast<PlayerModel**>(this + offsets::BasePlayer::playerModel);
+    }
+
+    PlayerInventory* inventory()
+    {
+        if (!this) return nullptr;
+        return *reinterpret_cast<PlayerInventory**>(this + offsets::BasePlayer::inventory);
+    }
+
+    std::uint32_t clActiveItem()
+    {
+        if (!this) return 0U;
+        return *reinterpret_cast<std::uint32_t*>(this + offsets::BasePlayer::clActiveItem);
+    }
+
+    template<typename T = HeldEntity>
+    T* GetHeldEntity() {
+        if (!this) return nullptr;
+
+        auto inventory = this->inventory();
+        if (!inventory) return nullptr;
+
+        auto belt = inventory->containerBelt();
+        if (!belt) return nullptr;
+
+        auto item_list = belt->itemList();
+        if (!item_list) return nullptr;
+
+        for (int i = 0; i < item_list->size; i++) {
+            auto item = reinterpret_cast<Item*>(item_list->get(i));
+            if (!item) continue;
+
+            if (item->uid() == this->clActiveItem())
+                return item->heldEntity<T>( );
+        }
+
+        return nullptr;
     }
 };
 

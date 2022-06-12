@@ -13,11 +13,13 @@ public:
 
     Transform* get_parent()
     {
+        if (!this) return nullptr;
         return reinterpret_cast<Transform * (*)(Transform*)>(game_module + offsets::UnityEngine_Transform::get_parent)(this);
     }
 
     Matrix4x4* get_localToWorldMatrix()
     {
+        if (!this) return nullptr;
         return reinterpret_cast<Matrix4x4 * (*)(Transform*)>(game_module + offsets::UnityEngine_Transform::get_localToWorldMatrix)(this);
     }
 };

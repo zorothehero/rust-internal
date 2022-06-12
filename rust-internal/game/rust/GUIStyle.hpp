@@ -12,6 +12,7 @@ public:
 
 	Vector2 CalcSize(GUIContent* content)
 	{
+		if (!this) return Vector2::Zero();
 		Vector2 ret = Vector2::Zero();
 		reinterpret_cast<void(__fastcall*)(GUIStyle*, GUIContent*, Vector2*)>(game_module + offsets::UnityEngine_GUIStyle::Internal_CalcSize_Injected_GUIContent_Vector2)(this, content, &ret);
 		return ret;

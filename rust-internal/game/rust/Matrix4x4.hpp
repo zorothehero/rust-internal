@@ -41,6 +41,7 @@ public:
 
     Vector3 MultiplyPoint3x4(Vector3 point)
     {
+        if(!this || point == Vector3::Zero())
         return reinterpret_cast<Vector3(*)(Matrix4x4*, Vector3)>(game_module + offsets::UnityEngine_Matrix4x4::MultiplyPoint3x4_Vector3)(this, point);
     }
 };

@@ -12,6 +12,7 @@ public:
 
 	Vector2 Delta()
 	{
+		if (!this) return Vector2::Zero();
 		auto m_ptr = *reinterpret_cast<std::uint64_t*>(this + offsets::UnityEngine_Event::m_Ptr);
 		if(!m_ptr) return Vector2::Zero();
 		
@@ -20,6 +21,7 @@ public:
 
 	Vector2 mousePosition()
 	{
+		if (!this) return Vector2::Zero();
 		auto m_ptr = *reinterpret_cast<std::uint64_t*>(this + offsets::UnityEngine_Event::m_Ptr);
 		if(!m_ptr) return Vector2::Zero();
 		

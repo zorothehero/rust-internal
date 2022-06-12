@@ -7,6 +7,7 @@ class BaseEntity : public BaseNetworkable
 public:
     Model* model()
     {
+        if (!this) return nullptr;
         return *reinterpret_cast<Model**>(this + offsets::BaseEntity::model);
     }
 };

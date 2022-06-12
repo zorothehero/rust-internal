@@ -12,16 +12,19 @@ public:
     
     float health()
     {
+        if (!this) return 0.0f;
         return *reinterpret_cast<float*>(this + offsets::BaseCombatEntity::_health);
     }
 
     float maxHealth()
     {
+        if (!this) return 0.0f;
         return *reinterpret_cast<float*>(this + offsets::BaseCombatEntity::_maxHealth);
     }
 
     LifeState lifeState()
     {
+        if (!this) return LifeState::Dead;
         return *reinterpret_cast<LifeState*>(this + offsets::BaseCombatEntity::lifestate);
     }
 };

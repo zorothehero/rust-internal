@@ -46,6 +46,27 @@ class Time;
 class BaseMovement;
 class ModelState;
 class PlayerWalkMovement;
+class InputState;
+class Terrain;
+class TerrainMeta;
+class TerrainHeightMap;
+class TerrainCollision;
+class ItemModProjectile;
+class AimConeUtil;
+class Projectile;
+class PlayerModel;
+class BaseProjectile;
+class HeldEntity;
+class Item;
+class PlayerInventory;
+class ItemContainer;
+class AttackEntity;
+class Object;
+class GameManifest;
+
+Vector2 screen_size = Vector2::Zero();
+Vector2 screen_center = Vector2::Zero();
+BasePlayer* target;
 
 #include "rust/TextAnchor.hpp"
 #include "rust/EventType.hpp"
@@ -67,6 +88,12 @@ class PlayerWalkMovement;
 #include "rust/ExplosionsFPS.hpp"
 #include "rust/Internal_DrawTextureArguments.hpp"
 
+#include "rust/ResourceRef.hpp"
+#include "rust/ListDictionary.hpp"
+#include "rust/HeldEntity.hpp"
+#include "rust/Item.hpp"
+#include "rust/PlayerInventory.hpp"
+#include "rust/ItemContainer.hpp"
 #include "rust/PlayerWalkMovement.hpp"
 #include "rust/ProtoBuf.hpp"
 #include "rust/ModelState.hpp"
@@ -89,20 +116,34 @@ class PlayerWalkMovement;
 #include "rust/GUI.hpp"
 #include "rust/Screen.hpp"
 #include "rust/Camera.hpp"
-#include "rust/ListDictionary.hpp"
 #include "rust/MainMenuSystem.hpp"
 #include "rust/MainCamera.hpp"
 #include "rust/BaseNetworkable.hpp"
 #include "rust/Model.hpp"
 #include "rust/BaseEntity.hpp"
+#include "rust/AttackEntity.hpp"
 #include "rust/BaseCombatEntity.hpp"
 #include "rust/PlayerTick.hpp"
+#include "rust/InputState.hpp"
 #include "rust/BasePlayer.hpp"
 #include "rust/LocalPlayer.hpp"
 #include "rust/GUILayout.hpp"
 #include "rust/GUILayoutOption.hpp"
 #include "rust/AssetBundle.hpp"
-
+#include "rust/Terrain.hpp"
+#include "rust/TerrainCollision.hpp"
+#include "rust/TerrainHeightMap.hpp"
+#include "rust/TerrainMeta.hpp"
+#include "rust/Object.hpp"
+#include "rust/ItemModProjectile.hpp"
+#include "rust/AimConeUtil.hpp"
+#include "rust/Projectile.hpp"
+#include "rust/PlayerModel.hpp"
+#include "rust/GameManifest.hpp"
+#include "rust/ItemDefinition.hpp"
+#include "rust/BaseProjectile.hpp"
+#include "features/aimbot.hpp"
+#include "features/DeathBarrier.hpp"
 #include "features/Flyhack.hpp"
 
 Vector3 LocalPlayer::eyePos()

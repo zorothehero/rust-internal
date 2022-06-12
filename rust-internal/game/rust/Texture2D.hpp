@@ -84,11 +84,13 @@ public:
 
 	void SetPixel(int x, int y, Color color)
     {
+		if (!this) return;
 	    reinterpret_cast<void(*)(Texture2D*, int, int, Color)>(game_module + offsets::UnityEngine_Texture2D::SetPixel_int_int_Color)(this, x, y, color);
     }
 
 	void Apply()
     {
+		if (!this) return;
 	    reinterpret_cast<void(*)(Texture2D*)>(game_module + offsets::UnityEngine_Texture2D::Apply)(this);
     }
 };

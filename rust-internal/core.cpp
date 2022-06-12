@@ -1,4 +1,4 @@
-#include "core.hpp"
+﻿#include "core.hpp"
 
 ExplosionsFPS* instance = 0;
 
@@ -34,7 +34,7 @@ void DrawGUI(Event* Event)
 		}
 		break;
 	case Tab::Combat:
-		
+		GUILayout::Toggle(settings::combat::aimbot, OBFUSCATE_STR("Aimbot"));
 		break;
 	case Tab::Misc:
 		GUILayout::Toggle(settings::misc::flyhackbar, OBFUSCATE_STR("Flyhack Indicator"));
@@ -42,6 +42,9 @@ void DrawGUI(Event* Event)
 			GUILayout::Toggle(settings::misc::antiflyhack, OBFUSCATE_STR("Anti Flyhack Kick"));
 		GUILayout::Toggle(settings::misc::AdminMode, OBFUSCATE_STR("Admin Mode"));
 		GUILayout::Toggle(settings::misc::inf_jump, OBFUSCATE_STR("Infinite Jump"));
+		GUILayout::Toggle(settings::misc::anti_barrier, OBFUSCATE_STR("Anti Death Barrier"));
+		GUILayout::Toggle(settings::misc::no_fall_dmg, OBFUSCATE_STR("No Fall Damage"));
+		GUILayout::Toggle(settings::misc::omni_sprint, OBFUSCATE_STR("Omni Sprint"));
 		break;
 	}
 	
@@ -73,34 +76,54 @@ void OnGUIHook(ExplosionsFPS* self)
 		//Renderer::Line({0,0}, {10, 10}, Color::white(), 1.5f);
 		if(!settings::player::esp) return;
 		
-		if(const auto visiblePlayerList = BasePlayer::visiblePlayerList())
+		if (const auto visiblePlayerList = BasePlayer::visiblePlayerList())
 		{
-			for(int i = 0; i < visiblePlayerList->vals->size; i++)
+			for (int i = 0; i < visiblePlayerList->vals->size; i++)
 			{
 				const auto player = visiblePlayerList->vals->get<BasePlayer*>(i);
-				if(!player || player == LocalPlayer::Entity()) continue;
+				if (!player || player == LocalPlayer::Entity()) {
+					target == nullptr;
+					continue;
+				}
 
 				Vector2 screenPos = Vector2::Zero();
-				
-				if(!MainCamera::mainCamera()->WorldToScreenPoint(player->midPoint(), screenPos)) continue;
+
+				if (!MainCamera::mainCamera()->WorldToScreenPoint(player->midPoint(), screenPos)) continue;
+
+				if (!target || target == nullptr)
+					target = player;
+				if (target != nullptr)
+				{
+					if (target != player)
+					{
+						Vector2 targetpos = Vector2::Zero();
+						MainCamera::mainCamera()->WorldToScreenPoint(target->midPoint(), targetpos);
+						if (screen_center.distance_2d(targetpos) > screen_center.distance_2d(screenPos))
+						{
+							target = player;
+						}
+					}
+				}
 
 				float y = 0.0f;
-				
+
 				Renderer::String(Vector2(screenPos.x, screenPos.y + y), player->_displayName(), Color(1, 1, 1, 1), true);
-				if(settings::player::health)
+				if (settings::player::health)
 				{
 					y += 15.0f;
 					Renderer::String(Vector2(screenPos.x, screenPos.y + y), il2cpp_string_new(std::format(OBFUSCATE_STR("{:.2f} HP"), player->health()).c_str()), Color(1, 1, 1, 1), true);
 				}
-				if(settings::player::distance)
+				if (settings::player::distance)
 				{
 					y += 15.0f;
 					Renderer::String(Vector2(screenPos.x, screenPos.y + y), il2cpp_string_new(std::format(OBFUSCATE_STR("{:.2f}m"), LocalPlayer::Entity()->midPoint().distance(player->midPoint())).c_str()), Color(1, 1, 1, 1), true);
 				}
 
-				if(settings::player::skeleton)
+				if (settings::player::skeleton)
 				{
-					auto info = player->bones( );
+					auto info = player->bones();
+
+					if (!info) continue;
 
 					auto head_b = info->head;
 					auto spine4_b = info->spine4;
@@ -172,33 +195,70 @@ void OnGUIHook(ExplosionsFPS* self)
 
 void UpdateHook(MainMenuSystem* self)
 {
+	RECT rectangle;
+	if (GetWindowRect(GetActiveWindow(), &rectangle))
+	{
+		screen_size = Vector2((rectangle.right - rectangle.left), (rectangle.bottom - rectangle.top));
+		screen_center = Vector2((rectangle.right - rectangle.left) * 0.5f, (rectangle.bottom - rectangle.top) * 0.5f);
+	}
+
 	if (instance == 0)
 		instance = reinterpret_cast<ExplosionsFPS*>(self->gameObject()->AddComponent(Type::GetType(OBFUSCATE_STR("ExplosionsFPS, Assembly-CSharp"))));
 
 	return self->Update();
 }
 
-void SendClientTick(BasePlayer* self)
+void set_flyingHook(bool value)
 {
+	return;
+}
+
+void HandleJumpingHook(PlayerWalkMovement* self, ModelState* state, bool wantsJump, bool jumpInDirection = false)
+{
+	if (settings::misc::inf_jump && wantsJump)
+		return self->Jump(state, jumpInDirection);
+
+	return self->HandleJumping(state, wantsJump, jumpInDirection);
+}
+
+void SendClientTickHook(BasePlayer* self)
+{
+	if (settings::misc::AdminMode) self->playerFlags() |= PlayerFlags::IsAdmin;
+
+	DeathBarrier::IsInsideTerrain(settings::misc::anti_barrier);
 
 	Flyhack::IsFlying(settings::misc::antiflyhack);
+	
 
 	return self->SendClientTick();
 }
 
-void set_flying(ModelState* self, bool state)
+void OnLandHook(BasePlayer* self, float vel)
 {
-	if (settings::misc::AdminMode)
-		return self->set_flying(false);
-
-	return self->set_flying(state);
+	if (!settings::misc::no_fall_dmg) 	
+		return self->OnLand(vel);
 }
 
-bool CanJumpHook(PlayerWalkMovement* self)
+void HandleRunDuckCrawlHook(PlayerWalkMovement* self, ModelState* state, bool wantsRun, bool wantsDuck, bool wantsCrawl)
 {
-	if (settings::misc::inf_jump)
-		return true;
-	return self->CanJump();
+	if (settings::misc::omni_sprint) 
+		wantsRun = true;
+
+	return self->HandleRunDuckCrawl(state, wantsRun, wantsDuck, wantsCrawl);
+}
+
+float GetRandomVelocityHook(ItemModProjectile* self)
+{
+	return self->GetRandomVelocity() * 1.45f;
+}
+
+Vector3 GetModifiedAimConeDirectionHook(float aimCone, Vector3 inputVec, bool anywhereInside)
+{
+	aimCone = 0.0f;
+	
+	inputVec = (aim::Predict() - LocalPlayer::Entity()->eyes()->position()).normalized();;
+
+	return AimConeUtil::GetModifiedAimConeDirection(aimCone, inputVec, anywhereInside);
 }
 
 void entry()
@@ -209,19 +269,43 @@ void entry()
 	#define DO_API(r, n, p) n = (r (*) p)(std::uintptr_t(LI_FN(GetProcAddress)(reinterpret_cast<HMODULE>(game_module), #n)))
 	#include "game/unity/il2cpp.hpp"
 	#undef DO_API
-	
-	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("PlayerWalkMovement")), OBFUSCATE_STR("CanJump"), 3), &CanJumpHook, &PlayerWalkMovement::CanJump_);
-	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ModelState")), OBFUSCATE_STR("set_flying"), 1), &set_flying, &ModelState::set_flying_);
-	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("BasePlayer")), OBFUSCATE_STR("SendClientTick"), 0), &SendClientTick, &BasePlayer::SendClientTick_);
-	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("MainMenuSystem")), OBFUSCATE_STR("Update"), 0), &UpdateHook, &MainMenuSystem::Update_);
-	hookmanager::hook(il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ExplosionsFPS")), OBFUSCATE_STR("OnGUI"), 0), &OnGUIHook, &ExplosionsFPS::OnGUI_);
+	#define LI_HK(a, b) a = *(decltype(a)*)(b); // *reinterpret_cast<decltype(a)*>(b);
+
+	LI_HK(BasePlayer::SendClientTick_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("BasePlayer")), OBFUSCATE_STR("SendClientTick"), 0));
+	LI_HK(MainMenuSystem::Update_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("MainMenuSystem")), OBFUSCATE_STR("Update"), 0));
+	LI_HK(ExplosionsFPS::OnGUI_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ExplosionsFPS")), OBFUSCATE_STR("OnGUI"), 0));
+	LI_HK(PlayerWalkMovement::HandleJumping_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("PlayerWalkMovement")), OBFUSCATE_STR("HandleJumping"), 3));
+	LI_HK(ModelState::set_flying_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ModelState")), OBFUSCATE_STR("set_flying"), 1));
+	LI_HK(BasePlayer::OnLand_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("BasePlayer")), OBFUSCATE_STR("OnLand"), 1));
+	LI_HK(PlayerWalkMovement::HandleRunDuckCrawl_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("PlayerWalkMovement")), OBFUSCATE_STR("HandleRunDuckCrawl"), 4));
+	LI_HK(ItemModProjectile::GetRandomVelocity_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("ItemModProjectile")), OBFUSCATE_STR("GetRandomVelocity"), 0));
+	LI_HK(AimConeUtil::GetModifiedAimConeDirection_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("AimConeUtil")), OBFUSCATE_STR("GetModifiedAimConeDirection"), 3));
+	LI_HK(PlayerTick::CopyTo_, il2cpp::getMethod(il2cpp::getClass(OBFUSCATE_STR("PlayerTick")), OBFUSCATE_STR("CopyTo"), 1));
+
+	#undef LI_HK	
+
+	hookmanager::hook(AimConeUtil::GetModifiedAimConeDirection_, GetModifiedAimConeDirectionHook);
+	hookmanager::hook(ItemModProjectile::GetRandomVelocity_, GetRandomVelocityHook);
+	hookmanager::hook(PlayerWalkMovement::HandleRunDuckCrawl_, HandleRunDuckCrawlHook);
+	hookmanager::hook(BasePlayer::OnLand_, OnLandHook);
+	hookmanager::hook(ModelState::set_flying_, set_flyingHook);
+	hookmanager::hook(PlayerWalkMovement::HandleJumping_, HandleJumpingHook);
+	hookmanager::hook(BasePlayer::SendClientTick_, SendClientTickHook);
+	//hookmanager::hook(PlayerTick::CopyTo_, CopyToHook);
+	hookmanager::hook(MainMenuSystem::Update_, UpdateHook);
+	hookmanager::hook(ExplosionsFPS::OnGUI_, OnGUIHook);
 }
+
 
 bool __stdcall DllMain(HMODULE hMod, const std::uint32_t call_reason, LPVOID)
 {
 	switch(call_reason)
 	{
 	case DLL_PROCESS_ATTACH:
+#ifdef _DEBUG
+		AllocConsole();
+		freopen("CONOUT$", "w", stdout);
+#endif
 		hModule = hMod;
 		entry();
 		break;

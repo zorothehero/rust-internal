@@ -74,7 +74,9 @@ namespace Flyhack
 		bool result;
 		flyhackPauseTime = Mathf::Max(0.0f, flyhackPauseTime - Time::deltaTime());
 		bool flag = ply->transform()->get_parent() == nullptr;
-		Matrix4x4* matrix4x = flag ? matrix4x->identity() : ply->transform()->get_parent()->get_localToWorldMatrix();
+		Matrix4x4* matrix4x = matrix4x = flag ? matrix4x->identity() : ply->transform()->get_parent()->get_localToWorldMatrix();
+		if (!matrix4x || matrix4x == nullptr) 
+			return false;
 		Vector3 oldPos = flag ? ply->lastSentTick()->position() : matrix4x->MultiplyPoint3x4(ply->lastSentTick()->position());
 		Vector3 vector = flag ? ply->transform()->position() : matrix4x->MultiplyPoint3x4(ply->transform()->position());
 
@@ -83,6 +85,7 @@ namespace Flyhack
 		if (result && PreventFlyhack)
 		{
 			ply->ForcePositionTo(oldPos);
+
 		}
 		return result;
 	}
